@@ -1,0 +1,32 @@
+# Render Blueprint. Deploy: New → Blueprint → point at this repo.
+# Set the `sync: false` secrets in the Render dashboard after the first deploy.
+services:
+  - type: web
+    name: integratrip-mcp-client
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm run build
+    # Apply DB migrations (idempotent) before starting the server.
+    startCommand: npm run db:migrate && npm run start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: AS_BASE_URL
+        value: https://tarea1-auth-z2fqxmm2ja-uc.a.run.app
+      - key: APP_LOGIN_REALM
+        value: pre
+      # Set APP_BASE_URL to the service's public URL, e.g.
+      # https://integratrip-mcp-client.onrender.com
+      - key: APP_BASE_URL
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: ENCRYPTION_KEY
+        sync: false
+      - key: SESSION_SECRET
+        sync: false
+      - key: PRE_CLIENT_ID
+        sync: false
+      - key: PRE_CLIENT_SECRET
+        sync: false
