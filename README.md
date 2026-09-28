@@ -16,6 +16,9 @@ ejecutarlas (`tools/call`) con formularios generados dinámicamente.
 
 ## Arquitectura (resumen)
 
+La documentación detallada, incluyendo el modelo entidad-relación y los
+diagramas de secuencia de PRE, DCR y CIMD, está en
+[docs/architecture.md](./docs/architecture.md).
 ```
 Navegador ──▶ Next.js (Route Handlers = backend server-side)
                  │
@@ -72,6 +75,10 @@ Ver [`.env.example`](./.env.example). Resumen:
 
 ## Despliegue (Render)
 
+El workflow de GitHub Actions en [`.github/workflows/ci.yml`](./.github/workflows/ci.yml)
+ejecuta `lint` y `build` en cada pull request y push a `main`. Render está
+configurado para desplegar automáticamente los cambios que llegan a `main`,
+por lo que un merge aprobado completa el ciclo CI/CD.
 1. Crea un proyecto Supabase y copia su `DATABASE_URL`.
 2. Render → New → Blueprint → este repo (usa [`render.yaml`](./render.yaml)).
 3. Tras el primer deploy, fija `APP_BASE_URL` a la URL pública del servicio y el

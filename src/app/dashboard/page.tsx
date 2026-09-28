@@ -5,6 +5,7 @@ import { listConnections } from "@/lib/connections/repo";
 import { AUTH_TYPE_LABELS } from "@/config/mcp-servers";
 import { ConnectForm } from "@/components/ConnectForm";
 import { DeleteConnectionButton } from "@/components/DeleteConnectionButton";
+import { LogoutButton } from "@/components/LogoutButton";
 
 export default async function DashboardPage(props: {
   searchParams: Promise<{ error?: string }>;
@@ -24,12 +25,7 @@ export default async function DashboardPage(props: {
           </Link>
           <div className="flex items-center gap-4 text-sm">
             <span className="text-slate-600">{session.email}</span>
-            <Link
-              href="/api/auth/logout"
-              className="rounded-md border border-slate-300 px-3 py-1.5 font-medium text-slate-700 transition hover:bg-slate-100"
-            >
-              Cerrar sesión
-            </Link>
+            <LogoutButton />
           </div>
         </div>
       </header>
