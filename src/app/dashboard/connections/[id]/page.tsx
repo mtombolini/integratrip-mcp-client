@@ -4,6 +4,7 @@ import { getSession } from "@/lib/auth/session";
 import { getConnection } from "@/lib/connections/repo";
 import { AUTH_TYPE_LABELS } from "@/config/mcp-servers";
 import { ToolsPanel } from "@/components/ToolsPanel";
+import { LogoutButton } from "@/components/LogoutButton";
 
 export default async function ConnectionPage(props: {
   params: Promise<{ id: string }>;
@@ -24,12 +25,7 @@ export default async function ConnectionPage(props: {
           </Link>
           <div className="flex items-center gap-4 text-sm">
             <span className="text-slate-600">{session.email}</span>
-            <Link
-              href="/api/auth/logout"
-              className="rounded-md border border-slate-300 px-3 py-1.5 font-medium text-slate-700 transition hover:bg-slate-100"
-            >
-              Cerrar sesión
-            </Link>
+            <LogoutButton />
           </div>
         </div>
       </header>
