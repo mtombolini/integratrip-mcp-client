@@ -9,6 +9,44 @@ Tareas 1 y 2 de IIC3103.
   planificar el viaje (vuelos, hotel y clima). El LLM se consume vía gRPC
   (`iic3103.llm.v1.Llm/Generate`) y el loop del agente se implementa a mano.
 
+## Tarea 3 — RAG sobre revistas
+
+La extensión de Tarea 3 mantiene la misma interfaz de chat y agrega la tool
+local `rag_search_magazines`. Esta tool se ejecuta en el BFF y consulta un
+dataset propio de Nomic construido desde chunks de Traveling Magazine; las
+tools MCP existentes continúan ejecutándose mediante `tools/call`.
+
+### Corpus procesado
+
+Los PDF originales se descargan localmente, pero no se versionan. Los chunks
+JSONL sí se incluyen en [`data/processed/`](./data/processed/). En el primer
+incremento se procesaron y validaron las ediciones 58–67 y 78: 11 ediciones y
+3.657 chunks. El descargador intenta las ediciones 58–78 para poder ampliar el
+corpus sin cambiar el código.
+
+El pipeline usa Docling sin OCR, `HybridChunker` y el tokenizer
+`sentence-transformers/all-MiniLM-L6-v2`:
+
+```bash
+uv venv --python 3.12 .venv-rag
+uv pip install --python .venv-rag/bin/python -r scripts/rag/requirements.txt
+.venv-rag/bin/python scripts/rag/download_magazines.py
+.venv-rag/bin/python scripts/rag/parse_magazines.py
+.venv-rag/bin/python scripts/rag/validate_chunks.py
+```
+
+La carga a Nomic requiere únicamente una variable local no versionada:
+
+```bash
+NOMIC_API_KEY=... .venv-rag/bin/python scripts/rag/upload_nomic.py \
+  --dataset integratrip-traveling-rag \
+  --index-name traveling-rag
+```
+
+La API key no se incluye en el README, el repositorio, el cliente del
+navegador ni las solicitudes a `Generate`. La URL pública del dataset y su
+identificador se agregarán cuando se cree el mapa en Atlas.
+
 ## Tarea 2 — Agente
 
 | Pieza | Dónde |
