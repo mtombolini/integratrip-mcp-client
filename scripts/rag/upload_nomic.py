@@ -80,6 +80,8 @@ def main() -> int:
         if projection is None:
             print("Index creation submitted, but Atlas did not return a map yet.")
         else:
+            print(f"Projection ID: {projection.id}")
+            print(f"Map name: {projection.name}")
             print(f"Dataset URL: {projection.dataset_link}")
             print(f"Map URL: {projection.map_link}")
         return 0

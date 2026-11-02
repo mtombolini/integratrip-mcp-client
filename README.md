@@ -32,7 +32,33 @@ uv pip install --python .venv-rag/bin/python -r scripts/rag/requirements.txt
 .venv-rag/bin/python scripts/rag/download_magazines.py
 .venv-rag/bin/python scripts/rag/parse_magazines.py
 .venv-rag/bin/python scripts/rag/validate_chunks.py
+.venv-rag/bin/python scripts/rag/test_contract.py
+.venv-rag/bin/python scripts/rag/analyze_corpus.py
 ```
+
+El análisis reproducible está en [`output/pdf/Informe_Dataset_Tarea3.pdf`](./output/pdf/Informe_Dataset_Tarea3.pdf)
+y sus métricas fuente en [`output/pdf/corpus_metrics.json`](./output/pdf/corpus_metrics.json).
+
+### Exploración previa del dataset
+
+La auditoría local encuentra temas de viajes, historia, arte, cultura,
+gastronomía, vinos, restaurantes, hoteles, naturaleza y arquitectura. Entre
+los destinos aparecen Galicia, Madrid, Zaragoza, La Mancha, Luberon,
+Marrakech, Belfast, Innsbruck, Costa Rica, México, Colombia, Argentina y
+Suiza, entre otros.
+
+No hay IDs duplicados; sí existen 29 grupos de texto exactamente repetido
+(256 chunks), que deben compararse con la vista de duplicados de Atlas. También
+hay 152 chunks potencialmente editoriales (publicidad, redacción, portada y
+créditos), conservados para no alterar el corpus pero marcados como posible
+ruido de retrieval. La estructura sugiere clusters de destinos/cultura,
+gastronomía/vino, hoteles/restaurantes y naturaleza/paisaje; esta hipótesis
+debe confirmarse visualmente en Atlas.
+
+Como control previo, las consultas locales encuentran coincidencias para
+`playas`, `castillos` y `comida romántica`. Estas cifras son una previsualización
+lexical, no resultados vectoriales: el PDF documenta los ejemplos y deja
+pendiente repetir las búsquedas en el mapa público.
 
 La carga a Nomic requiere únicamente una variable local no versionada:
 
@@ -48,6 +74,10 @@ identificador se agregarán cuando se cree el mapa en Atlas. El backend queda
 preparado para consumirlos mediante `NOMIC_API_KEY` y
 `NOMIC_PROJECTION_ID`; hasta configurar esas variables, la tool local devuelve
 un error de configuración y no expone secretos al navegador.
+
+Cuando Atlas responda, `upload_nomic.py` imprime el `Projection ID`, el
+identificador del dataset y las URLs pública de dataset y mapa para completar
+los entregables y configurar `NOMIC_PROJECTION_ID` en Render.
 
 ## Tarea 2 — Agente
 
