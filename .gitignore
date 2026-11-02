@@ -38,4 +38,10 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# RAG source PDFs and local Docling caches are reproducible build inputs, not
+# repository artifacts. The processed JSONL under data/processed is tracked.
+/data/raw/
+/data/docling-cache/
+/.venv-rag/
 next-env.d.ts
