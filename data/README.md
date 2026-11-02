@@ -14,8 +14,8 @@ Fuente de descarga indicada por el curso:
 
 `https://www.tienda-revistatraveling.es/descargas/travelingNN.pdf`
 
-Después de ejecutar el descargador, el README principal debe registrar las
-ediciones que efectivamente fueron procesadas.
+El estado reproducible actual contiene las 21 ediciones, de la 58 a la 78,
+con 7.366 chunks validados en 21 archivos JSONL.
 
 ## Formato procesado
 

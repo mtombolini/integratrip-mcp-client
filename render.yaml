@@ -39,3 +39,12 @@ services:
         sync: false
       - key: LLM_STUDENT_ID
         sync: false
+      # Nomic Atlas RAG — server-side only (Tarea 3)
+      - key: NOMIC_API_KEY
+        sync: false
+      - key: NOMIC_PROJECTION_ID
+        sync: false
+      - key: NOMIC_API_BASE_URL
+        value: https://api-atlas.nomic.ai
+      - key: NOMIC_EMBEDDING_MODEL
+        value: gte-multilingual-base

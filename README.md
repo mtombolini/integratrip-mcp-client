@@ -19,10 +19,9 @@ tools MCP existentes continúan ejecutándose mediante `tools/call`.
 ### Corpus procesado
 
 Los PDF originales se descargan localmente, pero no se versionan. Los chunks
-JSONL sí se incluyen en [`data/processed/`](./data/processed/). En el primer
-incremento se procesaron y validaron las ediciones 58–67 y 78: 11 ediciones y
-3.657 chunks. El descargador intenta las ediciones 58–78 para poder ampliar el
-corpus sin cambiar el código.
+JSONL sí se incluyen en [`data/processed/`](./data/processed/). Se procesaron y
+validaron las 21 ediciones 58–78, con 7.366 chunks. El descargador intenta el
+mismo rango para que el corpus sea reproducible sin cambiar el código.
 
 El pipeline usa Docling sin OCR, `HybridChunker` y el tokenizer
 `sentence-transformers/all-MiniLM-L6-v2`:
@@ -45,7 +44,10 @@ NOMIC_API_KEY=... .venv-rag/bin/python scripts/rag/upload_nomic.py \
 
 La API key no se incluye en el README, el repositorio, el cliente del
 navegador ni las solicitudes a `Generate`. La URL pública del dataset y su
-identificador se agregarán cuando se cree el mapa en Atlas.
+identificador se agregarán cuando se cree el mapa en Atlas. El backend queda
+preparado para consumirlos mediante `NOMIC_API_KEY` y
+`NOMIC_PROJECTION_ID`; hasta configurar esas variables, la tool local devuelve
+un error de configuración y no expone secretos al navegador.
 
 ## Tarea 2 — Agente
 
@@ -149,6 +151,10 @@ Ver [`.env.example`](./.env.example). Resumen:
 | `PRE_CLIENT_ID` / `PRE_CLIENT_SECRET` | Cliente pre-registrado (login + Andes Air). |
 | `LLM_GRPC_TARGET` / `LLM_GRPC_TLS` | Proxy LLM gRPC del curso (`host:443`, TLS). |
 | `LLM_STUDENT_EMAIL` / `LLM_STUDENT_ID` | Metadata del proxy LLM (si faltan, se usan las del usuario logueado). |
+| `NOMIC_API_KEY` | API key server-side para consultas y carga del dataset Atlas. |
+| `NOMIC_PROJECTION_ID` | Identificador del mapa/index público creado en Atlas. |
+| `NOMIC_API_BASE_URL` | Base URL de Atlas; por defecto `https://api-atlas.nomic.ai`. |
+| `NOMIC_EMBEDDING_MODEL` | Modelo de embeddings; por defecto `gte-multilingual-base`. |
 
 ## Despliegue (Render)
 
@@ -160,7 +166,8 @@ por lo que un merge aprobado completa el ciclo CI/CD.
 2. Render → New → Blueprint → este repo (usa [`render.yaml`](./render.yaml)).
 3. Tras el primer deploy, fija `APP_BASE_URL` a la URL pública del servicio y el
    resto de secretos (`DATABASE_URL`, `ENCRYPTION_KEY`, `SESSION_SECRET`,
-   `PRE_CLIENT_ID`, `PRE_CLIENT_SECRET`, `LLM_STUDENT_EMAIL`, `LLM_STUDENT_ID`).
+   `PRE_CLIENT_ID`, `PRE_CLIENT_SECRET`, `LLM_STUDENT_EMAIL`, `LLM_STUDENT_ID`,
+   `NOMIC_API_KEY` y `NOMIC_PROJECTION_ID`).
 4. En el `/console` del AS registra `redirect_uri = <APP_BASE_URL>/callback`.
 5. Redeploy. Las migraciones se aplican en el `startCommand`.
 
