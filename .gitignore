@@ -44,4 +44,5 @@ yarn-error.log*
 /data/raw/
 /data/docling-cache/
 /.venv-rag/
+**/__pycache__/
 next-env.d.ts
