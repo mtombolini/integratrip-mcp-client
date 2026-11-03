@@ -348,5 +348,10 @@
       ],
       "interpretation": "previsualización lexical local; confirmar en Atlas con búsqueda vectorial"
     }
-  ]
+  ],
+  "atlas": {
+    "projection_id": "fa545497-39bc-4f71-bbd8-a966e93d396e",
+    "dataset_url": "https://atlas.nomic.ai/data/maximiliano/integratrip-traveling-rag",
+    "map_url": "https://atlas.nomic.ai/data/maximiliano/integratrip-traveling-rag/map"
+  }
 }

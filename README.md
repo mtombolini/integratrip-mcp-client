@@ -70,14 +70,18 @@ NOMIC_API_KEY=... .venv-rag/bin/python scripts/rag/upload_nomic.py \
 
 La API key no se incluye en el README, el repositorio, el cliente del
 navegador ni las solicitudes a `Generate`. La URL pública del dataset y su
-identificador se agregarán cuando se cree el mapa en Atlas. El backend queda
-preparado para consumirlos mediante `NOMIC_API_KEY` y
-`NOMIC_PROJECTION_ID`; hasta configurar esas variables, la tool local devuelve
-un error de configuración y no expone secretos al navegador.
+identificador públicos ya fueron creados en Atlas:
 
-Cuando Atlas responda, `upload_nomic.py` imprime el `Projection ID`, el
-identificador del dataset y las URLs pública de dataset y mapa para completar
-los entregables y configurar `NOMIC_PROJECTION_ID` en Render.
+- Dataset: [maximiliano/integratrip-traveling-rag](https://atlas.nomic.ai/data/maximiliano/integratrip-traveling-rag)
+- Mapa: [Traveling RAG en Atlas](https://atlas.nomic.ai/data/maximiliano/integratrip-traveling-rag/map)
+- `NOMIC_PROJECTION_ID`: `fa545497-39bc-4f71-bbd8-a966e93d396e`
+
+El backend queda preparado para consumirlos mediante `NOMIC_API_KEY` y
+`NOMIC_PROJECTION_ID`; la API key permanece únicamente en el entorno
+server-side y nunca se expone al navegador.
+
+Cuando se cree otro dataset, `upload_nomic.py` imprime el `Projection ID`, el
+identificador y las URLs pública de dataset y mapa para actualizar Render.
 
 ## Tarea 2 — Agente
 

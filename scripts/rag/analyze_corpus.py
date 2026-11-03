@@ -177,6 +177,18 @@ def build_pdf(metrics: dict[str, object], output: Path) -> None:
         canvas.drawRightString(192 * mm, 9 * mm, f"{doc.page}")
         canvas.restoreState()
 
+    atlas = metrics.get("atlas", {})
+    projection_id = str(atlas.get("projection_id", "")).strip()
+    dataset_url = str(atlas.get("dataset_url", "")).strip()
+    map_url = str(atlas.get("map_url", "")).strip()
+    if projection_id and dataset_url and map_url:
+        atlas_state = (
+            f"El dataset ya fue publicado en Atlas con Projection ID {projection_id}. "
+            f"Dataset: {dataset_url}. Mapa: {map_url}. La inspección visual de clusters, "
+            "duplicados y búsquedas solicitadas debe completarse abriendo ese mapa."
+        )
+    else:
+        atlas_state = "El dataset local y el script de carga están listos, pero todavía no se ha registrado un mapa público de Atlas en este informe."
     doc = SimpleDocTemplate(str(output), pagesize=A4, rightMargin=18 * mm, leftMargin=18 * mm, topMargin=17 * mm, bottomMargin=20 * mm, title="Análisis de Dataset - IntegraTrip Tarea 3", author="IntegraTrip")
     story = [
         p("Análisis de Dataset", styles["ReportTitle"]),
@@ -211,7 +223,7 @@ def build_pdf(metrics: dict[str, object], output: Path) -> None:
         query_rows.append([p(str(item["query"]), styles["Table"]), p(str(item["matching_chunks"]), styles["Table"]), p(example_text, styles["Table"])])
     qt = Table(query_rows, colWidths=[45 * mm, 45 * mm, 75 * mm], repeatRows=1)
     qt.setStyle(TableStyle([("BACKGROUND", (0, 0), (-1, 0), teal), ("TEXTCOLOR", (0, 0), (-1, 0), colors.white), ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F5F8FA")]), ("GRID", (0, 0), (-1, -1), 0.35, colors.HexColor("#D8E0E7")), ("VALIGN", (0, 0), (-1, -1), "TOP"), ("PADDING", (0, 0), (-1, -1), 6)]))
-    story += [qt, Spacer(1, 8 * mm), p("Interpretación esperada", styles["H2Custom"]), p("Las cifras cuentan chunks donde aparece al menos uno de los términos de la consulta (regla OR), por lo que son un control de cobertura y no una métrica de relevancia. playas debería recuperar destinos costeros y actividades de litoral; castillos debería concentrarse en patrimonio, historia y rutas; comida romántica puede requerir expansión semántica hacia restaurantes, cenas, parejas, vistas o atardeceres. En Atlas, estas tres búsquedas deben repetirse con el buscador vectorial y documentar los fragmentos más relevantes.", styles["BodyCustom"]), p("Estado de Atlas", styles["H2Custom"]), p("El dataset local y el script de carga están listos, pero la publicación pública no se ejecutó porque NOMIC_API_KEY y NOMIC_PROJECTION_ID aún no están configurados. Por ello este informe no inventa un identificador, URL ni observaciones visuales del mapa.", styles["Quote"]), PageBreak(), p("5. Reproducibilidad y próximos pasos", styles["H1Custom"]), p("Para regenerar este informe desde cero:", styles["BodyCustom"]), p("1. Descargar las ediciones 58–78 con scripts/rag/download_magazines.py.\n2. Parsear con scripts/rag/parse_magazines.py.\n3. Validar con scripts/rag/validate_chunks.py.\n4. Analizar y generar este PDF con scripts/rag/analyze_corpus.py.\n5. Crear el dataset Atlas con scripts/rag/upload_nomic.py y registrar en README el identificador y la URL pública.", styles["BodyCustom"]), p("Criterio de seguridad", styles["H2Custom"]), p("La API key de Nomic sólo se lee desde el entorno del proceso server-side. No se guarda en el repositorio, no se incluye en el cliente ni se transmite al proxy LLM.", styles["BodyCustom"]), p("Conclusión", styles["H2Custom"]), p("La etapa local del RAG está completa y auditada: corpus completo, metadatos de origen, herramienta local, contrato de búsqueda y documentación reproducible. El siguiente hito es exclusivamente operacional: cargar el dataset en Atlas, abrir el mapa, confirmar estas observaciones y conectar su projection_id al despliegue.", styles["BodyCustom"]),
+    story += [qt, Spacer(1, 8 * mm), p("Interpretación esperada", styles["H2Custom"]), p("Las cifras cuentan chunks donde aparece al menos uno de los términos de la consulta (regla OR), por lo que son un control de cobertura y no una métrica de relevancia. playas debería recuperar destinos costeros y actividades de litoral; castillos debería concentrarse en patrimonio, historia y rutas; comida romántica puede requerir expansión semántica hacia restaurantes, cenas, parejas, vistas o atardeceres. En Atlas, estas tres búsquedas deben repetirse con el buscador vectorial y documentar los fragmentos más relevantes.", styles["BodyCustom"]), p("Estado de Atlas", styles["H2Custom"]), p(atlas_state, styles["Quote"]), PageBreak(), p("5. Reproducibilidad y próximos pasos", styles["H1Custom"]), p("Para regenerar este informe desde cero:", styles["BodyCustom"]), p("1. Descargar las ediciones 58–78 con scripts/rag/download_magazines.py.\n2. Parsear con scripts/rag/parse_magazines.py.\n3. Validar con scripts/rag/validate_chunks.py.\n4. Analizar y generar este PDF con scripts/rag/analyze_corpus.py.\n5. Crear el dataset Atlas con scripts/rag/upload_nomic.py y registrar en README el identificador y la URL pública.", styles["BodyCustom"]), p("Criterio de seguridad", styles["H2Custom"]), p("La API key de Nomic sólo se lee desde el entorno del proceso server-side. No se guarda en el repositorio, no se incluye en el cliente ni se transmite al proxy LLM.", styles["BodyCustom"]), p("Conclusión", styles["H2Custom"]), p("La etapa local del RAG está completa y auditada: corpus completo, metadatos de origen, herramienta local, contrato de búsqueda y documentación reproducible. El siguiente hito es abrir el mapa público, registrar las observaciones visuales y conectar su projection_id al despliegue.", styles["BodyCustom"]),
     ]
     doc.build(story, onFirstPage=footer, onLaterPages=footer)
 
@@ -221,9 +233,18 @@ def main() -> int:
     parser.add_argument("--input-dir", type=Path, default=Path("data/processed"))
     parser.add_argument("--output-pdf", type=Path, default=Path("output/pdf/Informe_Dataset_Tarea3.pdf"))
     parser.add_argument("--output-json", type=Path, default=Path("output/pdf/corpus_metrics.json"))
+    parser.add_argument("--atlas-projection-id")
+    parser.add_argument("--atlas-dataset-url")
+    parser.add_argument("--atlas-map-url")
     args = parser.parse_args()
     rows = read_rows(args.input_dir)
     metrics = build_metrics(rows)
+    if args.atlas_projection_id and args.atlas_dataset_url and args.atlas_map_url:
+        metrics["atlas"] = {
+            "projection_id": args.atlas_projection_id,
+            "dataset_url": args.atlas_dataset_url,
+            "map_url": args.atlas_map_url,
+        }
     args.output_json.parent.mkdir(parents=True, exist_ok=True)
     args.output_json.write_text(json.dumps(metrics, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     build_pdf(metrics, args.output_pdf)
