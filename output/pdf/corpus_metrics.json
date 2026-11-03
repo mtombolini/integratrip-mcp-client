@@ -353,5 +353,25 @@
     "projection_id": "fa545497-39bc-4f71-bbd8-a966e93d396e",
     "dataset_url": "https://atlas.nomic.ai/data/maximiliano/integratrip-traveling-rag",
     "map_url": "https://atlas.nomic.ai/data/maximiliano/integratrip-traveling-rag/map"
-  }
+  },
+  "atlas_searches": [
+    {
+      "query": "playas",
+      "results": 369,
+      "threshold": "0.59781",
+      "observation": "Beaches Spain + ruido editorial (DIRECTORA)"
+    },
+    {
+      "query": "castillos",
+      "results": 369,
+      "threshold": "0.61005",
+      "observation": "ruta/patrimonio y turismo de naturaleza; relevancia parcial"
+    },
+    {
+      "query": "comida romántica",
+      "results": 369,
+      "threshold": "0.55632",
+      "observation": "La Casa Romántica; gastronomía pertinente"
+    }
+  ]
 }

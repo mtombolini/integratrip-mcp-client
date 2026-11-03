@@ -41,11 +41,12 @@ y sus métricas fuente en [`output/pdf/corpus_metrics.json`](./output/pdf/corpus
 
 ### Exploración previa del dataset
 
-La auditoría local encuentra temas de viajes, historia, arte, cultura,
-gastronomía, vinos, restaurantes, hoteles, naturaleza y arquitectura. Entre
-los destinos aparecen Galicia, Madrid, Zaragoza, La Mancha, Luberon,
-Marrakech, Belfast, Innsbruck, Costa Rica, México, Colombia, Argentina y
-Suiza, entre otros.
+La auditoría local y la vista de Atlas muestran temas de viajes, historia, arte,
+cultura, gastronomía, vinos, restaurantes, hoteles, naturaleza y arquitectura.
+Atlas etiqueta clusters como `Spanish Gastronomy Magazine`, `Beaches Spain`,
+`Spanish Villages`, `Portuguese Wine Tourism`, `Andalusian History`, `Japanese
+Cuisine`, `Rural Tourism Argentina`, `African Safari`, `Japanese Tea` y
+`Armenian Wine`.
 
 No hay IDs duplicados; sí existen 29 grupos de texto exactamente repetido
 (256 chunks), que deben compararse con la vista de duplicados de Atlas. También
@@ -55,10 +56,13 @@ ruido de retrieval. La estructura sugiere clusters de destinos/cultura,
 gastronomía/vino, hoteles/restaurantes y naturaleza/paisaje; esta hipótesis
 debe confirmarse visualmente en Atlas.
 
-Como control previo, las consultas locales encuentran coincidencias para
-`playas`, `castillos` y `comida romántica`. Estas cifras son una previsualización
-lexical, no resultados vectoriales: el PDF documenta los ejemplos y deja
-pendiente repetir las búsquedas en el mapa público.
+En la inspección de Atlas, las tres consultas devolvieron 369 resultados (el
+5,01% superior): `playas` con umbral 0.59781, `castillos` con 0.61005 y
+`comida romántica` con 0.55632. `playas` mostró el cluster Beaches Spain, pero
+también ruido editorial de Magazine Publishing/Executive Leadership; `castillos`
+recuperó una ruta patrimonial y turismo de naturaleza; `comida romántica`
+recuperó el encabezado La Casa Romántica dentro de gastronomía. Estas
+observaciones están documentadas en el PDF.
 
 La carga a Nomic requiere únicamente una variable local no versionada:
 
