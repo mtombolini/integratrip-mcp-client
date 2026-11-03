@@ -118,7 +118,7 @@ renderiza con `react-markdown` (sin HTML crudo).
 
 **Informe de aprendizajes:** [`docs/Informe_Aprendizajes.pdf`](./docs/Informe_Aprendizajes.pdf).
 
-**Despliegue:** https://integratrip-tarea2.onrender.com
+**Despliegue Tarea 3:** https://integratrip-tarea3.onrender.com
 
 ## Stack
 
